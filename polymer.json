@@ -1,0 +1,35 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/vaadin-elements-app.html",
+  "fragments": [
+    "src/employee-list.html",
+    "src/employee-sales.html",
+    "src/employee-new.html",
+    "src/404.html"
+  ],
+  "sources": [
+   "src/**/*",
+   "images/**/*",
+   "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js",
+    "!bower_components/webcomponentsjs/gulpfile.js",
+    "employees.json"
+  ],
+  "lint": {
+    "rules": ["polymer-2"]
+  },
+  "builds": [
+    {
+      "preset": "es5-bundled"
+    },
+    {
+      "preset": "es6-bundled"
+    },
+    {
+      "preset": "es6-unbundled"
+    }
+  ]
+}

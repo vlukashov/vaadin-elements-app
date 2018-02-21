@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>Tests</title>
+
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+  </head>
+  <body>
+    <script>
+      WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
+
+      WCT.loadSuites([
+        'employee-list.html',
+        'employee-sales.html',
+        'employee-new.html'
+      ]
+        .reduce(function(suites, suite) {
+          return suites.concat([suite, `${suite}?wc-shadydom=true`]);
+        }, [])
+      );
+    </script>
+  </body>
+</html>

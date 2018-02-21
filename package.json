@@ -5,7 +5,8 @@
   "devDependencies": {
     "eslint": "^4.13.0",
     "eslint-config-vaadin": "latest",
-    "eslint-plugin-html": "^4.0.0"
+    "eslint-plugin-html": "^4.0.0",
+    "express": "4.16.2"
   },
   "scripts": {
     "lint": "npm run lint:javascript && polymer lint",

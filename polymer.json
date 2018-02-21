@@ -1,5 +1,6 @@
 {
   "entrypoint": "index.html",
+  "autoBasePath": true,
   "shell": "src/vaadin-elements-app.html",
   "fragments": [
     "src/employee-list.html",

@@ -38,40 +38,28 @@
       .drawer-list {
         margin: var(--lumo-space-tall-m);
       }
-      .drawer-list a {
+      .drawer-list stencil-route-link > a {
         display: block;
         padding: 0 var(--lumo-space-m);
         color: var(--lumo-secondary-text-color);
         line-height: var(--lumo-size-m);
         text-decoration: none;
       }
-      .drawer-list a.iron-selected {
+      .drawer-list stencil-route-link > a.link-active {
         color: var(--lumo-body-text-color);
         font-weight: bold;
       }
     </style>
 
-    <app-location
-        route="{{route}}"
-        url-space-regex="^[[rootPath]]">
-    </app-location>
-
-    <app-route
-        route="{{route}}"
-        pattern="[[rootPath]]:page"
-        data="{{routeData}}"
-        tail="{{subroute}}">
-    </app-route>
-
     <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="employee-list" href="employee-list">Employee list</a>
-          <a name="employee-sales" href="employee-sales">Employee sales</a>
-          <a name="employee-new" href="employee-new">New employee</a>
-        </iron-selector>
+        <nav class="drawer-list" role="navigation">
+          <stencil-route-link url="[[rootPath]]employee-list" url-match="[[_startPageUrlMatch()]]" exact="true">Employee list</stencil-route-link>
+          <stencil-route-link url="[[rootPath]]employee-sales">Employee sales</stencil-route-link>
+          <stencil-route-link url="[[rootPath]]employee-new">New employee</stencil-route-link>
+        </nav>
       </app-drawer>
 
       <!-- Main content -->
@@ -86,16 +74,16 @@
           </app-toolbar>
         </app-header>
 
-        <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="view404"
-            role="main">
-          <employee-list name="employee-list"></employee-list>
-          <employee-sales name="employee-sales"></employee-sales>
-          <employee-new name="employee-new"></employee-new>
-          <app-404 name="404"></app-404>
-        </iron-pages>
+        <stencil-router>
+          <stencil-route url="[[_startPageUrlMatch()]]" component="employee-list" exact="true" group="main" route-render=[[render]]></stencil-route>
+          <stencil-route url="[[rootPath]]employee-sales" component="employee-sales" group="main" route-render=[[render]]></stencil-route>
+          <stencil-route url="[[rootPath]]employee-new" component="employee-new" group="main" route-render=[[render]]></stencil-route>
+
+          <!-- @stencil/router 0.0.25 has a bug: the search order in a group varies randomly between app reloads
+               sometimes the 404 route would be matched first and sometimes the correct route would be matched before.
+               To avoid random 404 screens, remove the 404 route altogether. -->
+          <!-- <stencil-route component="app-404" group="main" route-render=[[render]]></stencil-route> -->
+        </stencil-router>
       </app-header-layout>
     </app-drawer-layout>
   </template>
@@ -112,52 +100,40 @@
 
       static get properties() {
         return {
-          page: {
-            type: String,
-            reflectToAttribute: true,
-            observer: '_pageChanged',
-          },
-          routeData: Object,
-          subroute: String,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
         };
       }
 
-      static get observers() {
-        return [
-          '_routePageChanged(routeData.page)',
-        ];
+      constructor() {
+        super();
+        this.render = this._render.bind(this);
       }
 
-      _routePageChanged(page) {
-        // If no page was found in the route data, page will be an empty string.
-        // Default to 'employee-list' in that case.
-        this.page = page || 'employee-list';
+      ready() {
+        super.ready();
+
+        const activeRouter = window.stencilrouter.Context.activeRouter;
+        activeRouter.subscribe(this._routeChanged.bind(this));
+      }
+
+      _routeChanged() {
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
       }
 
-      _pageChanged(page) {
-        // Load page import on demand. Show 404 page if fails
-        const resolvedPageUrl = this.resolveUrl(page + '.html');
-        Polymer.importHref(
-          resolvedPageUrl,
-          null,
-          this._showPage404.bind(this),
-          true
-        );
-      }
-
-      _showPage404() {
-        this.page = '404';
+      _startPageUrlMatch() {
+        return [this.rootPath, `${this.rootPath}employee-list`];
       }
       
-      _drawerToggle() {
-        this.$.drawer.toggle();
+      _render(props) {
+        const page = props.component === 'app-404' ? '404' : props.component;
+        const resolvedPageUrl = this.resolveUrl(page + '.html');
+        Polymer.importHref(resolvedPageUrl, null, null, true);
+        return window.stencilrouter.h(props.component, props);
       }
     }
     window.customElements.define(VaadinElementsApp.is, VaadinElementsApp);

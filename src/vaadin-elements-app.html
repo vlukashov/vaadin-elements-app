@@ -5,9 +5,8 @@
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
-<link rel="import" href="../bower_components/app-route/app-location.html">
-<link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/pushstate-anchor/pushstate-anchor.html">
+<link rel="import" href="../bower_components/app-router/app-router.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/vaadin-lumo-styles/icons.html">
@@ -51,26 +50,14 @@
       }
     </style>
 
-    <app-location
-        route="{{route}}"
-        url-space-regex="^[[rootPath]]">
-    </app-location>
-
-    <app-route
-        route="{{route}}"
-        pattern="[[rootPath]]:page"
-        data="{{routeData}}"
-        tail="{{subroute}}">
-    </app-route>
-
     <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="employee-list" href="employee-list">Employee list</a>
-          <a name="employee-sales" href="employee-sales">Employee sales</a>
-          <a name="employee-new" href="employee-new">New employee</a>
+          <a is="pushstate-anchor" name="employee-list" href="employee-list">Employee list</a>
+          <a is="pushstate-anchor" name="employee-sales" href="employee-sales">Employee sales</a>
+          <a is="pushstate-anchor" name="employee-new" href="employee-new">New employee</a>
         </iron-selector>
       </app-drawer>
 
@@ -86,16 +73,16 @@
           </app-toolbar>
         </app-header>
 
-        <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="view404"
-            role="main">
-          <employee-list name="employee-list"></employee-list>
-          <employee-sales name="employee-sales"></employee-sales>
-          <employee-new name="employee-new"></employee-new>
-          <app-404 name="404"></app-404>
-        </iron-pages>
+        <app-router on-activate-route-start="_onActivateRoute">
+          <app-route name="employee-list" path$="[[rootPath]]" import$="[[rootPath]]src/employee-list.html"></app-route>
+          <app-route name="employee-list" path$="[[rootPath]]employee-list" import$="[[rootPath]]src/employee-list.html"></app-route>
+          <app-route name="employee-sales" path$="[[rootPath]]employee-sales" import$="[[rootPath]]src/employee-sales.html"></app-route>
+          <app-route name="employee-new" path$="[[rootPath]]employee-new" import$="[[rootPath]]src/employee-new.html"></app-route>
+
+          <!-- matches everything else -->
+          <app-route path="*" import$="[[rootPath]]src/404.html" element="app-404"></app-route>
+        </app-router>
+
       </app-header-layout>
     </app-drawer-layout>
   </template>
@@ -112,52 +99,23 @@
 
       static get properties() {
         return {
-          page: {
-            type: String,
-            reflectToAttribute: true,
-            observer: '_pageChanged',
-          },
-          routeData: Object,
-          subroute: String,
+          page: String,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
         };
       }
 
-      static get observers() {
-        return [
-          '_routePageChanged(routeData.page)',
-        ];
+      _onActivateRoute(event, detail) {
+        this.page = detail.route.getAttribute('name');
+        this._routeChanged();
       }
 
-      _routePageChanged(page) {
-        // If no page was found in the route data, page will be an empty string.
-        // Default to 'employee-list' in that case.
-        this.page = page || 'employee-list';
+      _routeChanged() {
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
-      }
-
-      _pageChanged(page) {
-        // Load page import on demand. Show 404 page if fails
-        const resolvedPageUrl = this.resolveUrl(page + '.html');
-        Polymer.importHref(
-          resolvedPageUrl,
-          null,
-          this._showPage404.bind(this),
-          true
-        );
-      }
-
-      _showPage404() {
-        this.page = '404';
-      }
-      
-      _drawerToggle() {
-        this.$.drawer.toggle();
       }
     }
     window.customElements.define(VaadinElementsApp.is, VaadinElementsApp);

@@ -75,14 +75,14 @@
         </app-header>
 
         <stencil-router>
-          <stencil-route url="[[_startPageUrlMatch()]]" component="employee-list" exact group="main" route-render="[[render]]"></stencil-route>
-          <stencil-route url="[[rootPath]]employee-sales" component="employee-sales" group="main" route-render="[[render]]"></stencil-route>
-          <stencil-route url="[[rootPath]]employee-new" component="employee-new" group="main" route-render="[[render]]"></stencil-route>
+          <stencil-route group="main" url="[[_startPageUrlMatch()]]" exact component="employee-list" route-render="[[render]]"></stencil-route>
+          <stencil-route group="main" url="[[rootPath]]employee-sales" component="employee-sales" route-render="[[render]]"></stencil-route>
+          <stencil-route group="main" url="[[rootPath]]employee-new" component="employee-new" route-render="[[render]]"></stencil-route>
 
           <!-- @stencil/router 0.0.25 has a bug: the search order in a group varies randomly between app reloads
                sometimes the 404 route would be matched first and sometimes the correct route would be matched before.
                To avoid random 404 screens, remove the 404 route altogether. -->
-          <!-- <stencil-route component="app-404" group="main" route-render=[[render]]></stencil-route> -->
+          <!-- <stencil-route group="main" component="app-404" route-render=[[render]]></stencil-route> -->
         </stencil-router>
       </app-header-layout>
     </app-drawer-layout>

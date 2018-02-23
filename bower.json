@@ -34,7 +34,8 @@
     "vaadin-radio-button": "vaadin/vaadin-radio-button#^1.0.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.0.0",
     "vaadin-upload": "vaadin/vaadin-upload#^4.0.0",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0"
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0",
+    "iron-lazy-pages": "^2.1.1"
   },
   "devDependencies": {
     "web-component-tester": "^6.0.0"

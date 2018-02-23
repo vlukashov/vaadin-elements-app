@@ -56,7 +56,7 @@
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
         <nav class="drawer-list" role="navigation">
-          <stencil-route-link url="[[rootPath]]employee-list" url-match="[[_startPageUrlMatch()]]" exact="true">Employee list</stencil-route-link>
+          <stencil-route-link url="[[rootPath]]employee-list" url-match="[[_startPageUrlMatch()]]" exact>Employee list</stencil-route-link>
           <stencil-route-link url="[[rootPath]]employee-sales">Employee sales</stencil-route-link>
           <stencil-route-link url="[[rootPath]]employee-new">New employee</stencil-route-link>
         </nav>
@@ -75,7 +75,7 @@
         </app-header>
 
         <stencil-router>
-          <stencil-route url="[[_startPageUrlMatch()]]" component="employee-list" exact="true" group="main" route-render="[[render]]"></stencil-route>
+          <stencil-route url="[[_startPageUrlMatch()]]" component="employee-list" exact group="main" route-render="[[render]]"></stencil-route>
           <stencil-route url="[[rootPath]]employee-sales" component="employee-sales" group="main" route-render="[[render]]"></stencil-route>
           <stencil-route url="[[rootPath]]employee-new" component="employee-new" group="main" route-render="[[render]]"></stencil-route>
 

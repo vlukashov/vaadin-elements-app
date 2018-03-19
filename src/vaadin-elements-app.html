@@ -76,6 +76,7 @@
 
         <stencil-router>
           <stencil-route group="main" url="[[_startPageUrlMatch()]]" exact component="employee-list" route-render="[[render]]"></stencil-route>
+          <stencil-route group="main" url="[[rootPath]]employee-list/:employeeId" component="employee-details" route-render="[[render]]"></stencil-route>
           <stencil-route group="main" url="[[rootPath]]employee-sales" component="employee-sales" route-render="[[render]]"></stencil-route>
           <stencil-route group="main" url="[[rootPath]]employee-new" component="employee-new" route-render="[[render]]"></stencil-route>
 

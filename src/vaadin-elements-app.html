@@ -92,7 +92,7 @@
             fallback-selection="404"
             role="main">
           <template restamp is="dom-if" name="employee-list" data-path="employee-list.html">
-            <employee-list></employee-list>
+            <employee-list subroute="[[subroute]]"></employee-list>
           </template>
           <template restamp is="dom-if" name="employee-sales" data-path="employee-sales.html">
             <employee-sales></employee-sales>
@@ -125,7 +125,7 @@
             reflectToAttribute: true
           },
           routeData: Object,
-          subroute: String,
+          subroute: Object,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,

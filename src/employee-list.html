@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
@@ -20,6 +21,13 @@
       }
     </style>
 
+    <app-route
+      route="[[subroute]]"
+      pattern="/:employeeId"
+      data="{{routeData}}"
+      active="{{single}}">
+    </app-route>
+
     <iron-ajax
       auto
       url="employees.json"
@@ -27,30 +35,35 @@
       last-response="{{_employees}}"></iron-ajax>
 
     <div class="card">
-      <vaadin-grid items="[[_employees]]">
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-filter aria-label="First Name" path="firstName" value="[[_filterFirstName]]">
-              <vaadin-text-field slot="filter" placeholder="First Name" value="{{_filterFirstName}}" focus-target></vaadin-text-field>
-            </vaadin-grid-filter>
-          </template>
-          <template>[[item.firstName]]</template>
-        </vaadin-grid-column>
+      <template is="dom-if" if="[[single]]">
+        <p>You are viewing the details of an empoloyee with the ID [[routeData.employeeId]]</p>
+      </template>
+      <template is="dom-if" if="[[!single]]">
+        <vaadin-grid items="[[_employees]]">
+          <vaadin-grid-column>
+            <template class="header">
+              <vaadin-grid-filter aria-label="First Name" path="firstName" value="[[_filterFirstName]]">
+                <vaadin-text-field slot="filter" placeholder="First Name" value="{{_filterFirstName}}" focus-target></vaadin-text-field>
+              </vaadin-grid-filter>
+            </template>
+            <template>[[item.firstName]]</template>
+          </vaadin-grid-column>
 
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-filter aria-label="Last Name" path="lastName" value="[[_filterLastName]]">
-              <vaadin-text-field slot="filter" placeholder="Last Name" value="{{_filterLastName}}" focus-target></vaadin-text-field>
-            </vaadin-grid-filter>
-          </template>
-          <template>[[item.lastName]]</template>
-        </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template class="header">
+              <vaadin-grid-filter aria-label="Last Name" path="lastName" value="[[_filterLastName]]">
+                <vaadin-text-field slot="filter" placeholder="Last Name" value="{{_filterLastName}}" focus-target></vaadin-text-field>
+              </vaadin-grid-filter>
+            </template>
+            <template>[[item.lastName]]</template>
+          </vaadin-grid-column>
 
-        <vaadin-grid-column>
-          <template class="header">Email</template>
-          <template>[[item.email]]</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
+          <vaadin-grid-column>
+            <template class="header">Email</template>
+            <template>[[item.email]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid>
+      </template>
     </div>
   </template>
   <script>
@@ -60,6 +73,15 @@
       }
       static get properties() {
         return {
+          subroute: {
+            type: Object
+          },
+          routeData: {
+            type: Object
+          },
+          single: {
+            type: Boolean
+          },
           _employees: {
             type: Array,
             value: () => []

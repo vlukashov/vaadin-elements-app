@@ -91,7 +91,7 @@
             attr-for-selected="name"
             fallback-selection="404"
             role="main">
-          <employee-list name="employee-list"></employee-list>
+          <employee-list name="employee-list" subroute="[[subroute]]"></employee-list>
           <employee-sales name="employee-sales"></employee-sales>
           <employee-new name="employee-new"></employee-new>
           <app-404 name="404"></app-404>
@@ -118,7 +118,7 @@
             observer: '_pageChanged',
           },
           routeData: Object,
-          subroute: String,
+          subroute: Object,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,

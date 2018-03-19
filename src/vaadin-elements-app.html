@@ -74,10 +74,10 @@
         </app-header>
 
         <app-router on-activate-route-start="_onActivateRoute">
-          <app-route name="employee-list" path$="[[rootPath]]" import$="[[rootPath]]src/employee-list.html"></app-route>
-          <app-route name="employee-list" path$="[[rootPath]]employee-list" import$="[[rootPath]]src/employee-list.html"></app-route>
-          <app-route name="employee-sales" path$="[[rootPath]]employee-sales" import$="[[rootPath]]src/employee-sales.html"></app-route>
-          <app-route name="employee-new" path$="[[rootPath]]employee-new" import$="[[rootPath]]src/employee-new.html"></app-route>
+          <app-route path$="[[rootPath]]" import$="[[rootPath]]src/employee-list.html"></app-route>
+          <app-route path$="[[rootPath]]employee-list" import$="[[rootPath]]src/employee-list.html"></app-route>
+          <app-route path$="[[rootPath]]employee-sales" import$="[[rootPath]]src/employee-sales.html"></app-route>
+          <app-route path$="[[rootPath]]employee-new" import$="[[rootPath]]src/employee-new.html"></app-route>
 
           <!-- matches everything else -->
           <app-route path="*" import$="[[rootPath]]src/404.html" element="app-404"></app-route>

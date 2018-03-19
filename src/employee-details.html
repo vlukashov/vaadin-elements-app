@@ -1,0 +1,32 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="employee-details">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        background: transparent;
+      }
+    </style>
+
+    <div class="card">
+      <p>You are viewing the details of an employee with the ID [[employeeId]]</p>
+    </div>
+  </template>
+  <script>
+    class EmployeeDetails extends Polymer.Element {
+      static get is() {
+        return 'employee-details';
+      }
+      static get properties() {
+        return {
+          employeeId: {
+            type: String
+          }
+        };
+      }
+    }
+    window.customElements.define(EmployeeDetails.is, EmployeeDetails);
+  </script>
+</dom-module>

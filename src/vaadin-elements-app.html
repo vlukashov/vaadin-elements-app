@@ -73,9 +73,10 @@
           </app-toolbar>
         </app-header>
 
-        <app-router on-activate-route-start="_onActivateRoute">
+        <app-router on-activate-route-start="_onActivateRoute" trailingSlash="ignore">
           <app-route path$="[[rootPath]]" import$="[[rootPath]]src/employee-list.html"></app-route>
           <app-route path$="[[rootPath]]employee-list" import$="[[rootPath]]src/employee-list.html"></app-route>
+          <app-route path$="[[rootPath]]employee-list/:employeeId" import$="[[rootPath]]src/employee-details.html"></app-route>
           <app-route path$="[[rootPath]]employee-sales" import$="[[rootPath]]src/employee-sales.html"></app-route>
           <app-route path$="[[rootPath]]employee-new" import$="[[rootPath]]src/employee-new.html"></app-route>
 
